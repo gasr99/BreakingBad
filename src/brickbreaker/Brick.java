@@ -32,7 +32,7 @@ public class Brick extends Item {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.pill, x, y, null);
+        g.drawImage(Assets.pill_1, x, y, null);
     }
     
 }
