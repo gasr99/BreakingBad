@@ -13,24 +13,16 @@ import java.awt.Graphics;
  */
 public class Player extends Item {
     
-    private int direction;
     private int width;
     private int height;
     private Game game;
     
-    public Player(int x, int y, int direction, int width, int height, Game game){
+    public Player(int x, int y, int width, int height, Game game){
        super(x,y);
-       this.direction  = direction;
        this.width = width;
        this.height = height;
        this.game = game;
     }
-    
-    
-    public int getDirection(){
-        return direction;
-    }
-    
     
     public int getWidth(){
         return width;
@@ -38,11 +30,6 @@ public class Player extends Item {
     
     public int getHeight(){
         return height;
-    }
-    
-    
-    public void setDirection(int direction){
-        this.direction = direction;
     }
     
     public void setWidth(int width){
@@ -64,11 +51,11 @@ public class Player extends Item {
             setX(getX() + 1);
         }
         
-        if(getX() + 60 >= game.getWidth()){
-            setX(game.getWidth() - 60);
+        if(getX() + 200 >= game.getWidth()){
+            setX(game.getWidth() - 201);
             
-        } else if(getX() <= -30){
-            setX(-30);  
+        } else if(getX() <= 0){
+            setX(1);  
         }
         
         if(getY() + 80 >= game.getHeight()){

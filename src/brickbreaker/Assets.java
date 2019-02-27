@@ -15,11 +15,16 @@ public class Assets {
     
     public static BufferedImage background; // to store background image 
     public static BufferedImage player; // to store the player image
+    public static BufferedImage ball; // to store the ball image
+    public static BufferedImage pill; // to store the pill image
     
     /**
-* initializing the images of the game */
-public static void init() {
-background = ImageLoader.loadImage("/images/Background.jpg");
-player = ImageLoader.loadImage("/images/Kirby.png"); }
+    * initializing the images of the game */
+    public static void init() {
+    background = ImageLoader.loadImage("/images/background.jpg");
+    player = ImageLoader.loadImage("/images/player.png");
+    ball = ImageLoader.loadImage("/images/ball.png");
+    pill = ImageLoader.loadImage("/images/pill.png");
+    }
     
 }

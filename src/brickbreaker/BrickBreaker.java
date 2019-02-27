@@ -17,7 +17,7 @@ public class BrickBreaker {
 
     public static void main(String[] args){
         //creating a game object
-        Game g = new Game("Brick Breaker", 800,500);
+        Game g = new Game("Brick Breaker", 600,750);
         //initialize the game
         g.start();
     }
