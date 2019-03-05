@@ -8,6 +8,7 @@ package brickbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.LinkedList;
 
 /**
  *
@@ -24,6 +25,7 @@ public class Game implements Runnable{
     private Thread thread; // thread to create the game
     private boolean running; //to set the game
     private Player player; //to use a player
+    private LinkedList<Brick> bricks;
     private KeyManager keyManager; // to manage the keyboard
     
     
@@ -39,6 +41,7 @@ public class Game implements Runnable{
         this.height = height;
         running = false;
         keyManager = new KeyManager();
+        bricks = new LinkedList<Brick>();
     }
     
      @Override
@@ -78,7 +81,19 @@ public class Game implements Runnable{
         display = new Display(title, width, height);
         Assets.init();
         player = new Player(getWidth()/2, getHeight() - 100, 200, 40, this);
+        spawnBricks();
         display.getJframe().addKeyListener(keyManager);
+    }
+    
+    /**
+     * Spawns the bricks for the game
+     */
+    private void spawnBricks(){
+        for(int i = 0; i < 6; i++){
+            for(int j = 0; j < 4; j++){
+                bricks.add(new Brick(100*i, 50*j, 100, 50, this));
+            }
+        }
     }
     
     public KeyManager getKeyManager(){
@@ -87,8 +102,11 @@ public class Game implements Runnable{
     
     private void tick(){
        
-       keyManager.tick();
-       player.tick();
+        if(!getKeyManager().pause){
+           keyManager.tick();
+           player.tick(); 
+        }
+       
         
     }
     
@@ -107,6 +125,11 @@ public class Game implements Runnable{
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null); 
             player.render(g);
+            for (int i = 0; i < bricks.size(); i++) {
+                    Brick brick =  bricks.get(i);
+                    brick.tick();
+                    brick.render(g);
+                }
             bs.show();
             g.dispose();
         }

@@ -16,23 +16,27 @@ public class Brick extends Item {
     private int width;
     private int height;
     private Game game;
+    private Animation destroy;
     
     public Brick(int x, int y, int width, int height, Game game){
         super(x,y);
         this.width = width;
         this.height = height;
+        this.destroy = new Animation(Assets.pill,10);
         this.game = game;
     }
 
     @Override
     public void tick() {
         
+        this.destroy.tick();
         
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.pill_1, x, y, null);
+        //g.drawImage(Assets.pillS, x, y,width, height, null);
+        g.drawImage(destroy.getCurrentFrame(), x, y,width, height, null);
     }
     
 }
