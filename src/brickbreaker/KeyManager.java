@@ -33,9 +33,11 @@ public class KeyManager implements KeyListener {
     
     @Override
     public void keyPressed(KeyEvent e){
+        // Change pause's state
         if(e.getKeyCode() == KeyEvent.VK_P){
             pause = !pause;
         }
+        // Read imput if not paused
         if(!pause){
             keys[e.getKeyCode()] = true;
         }
@@ -43,14 +45,13 @@ public class KeyManager implements KeyListener {
     
     @Override
     public void keyReleased(KeyEvent e){
-        keys[e.getKeyCode()] = false;
+            keys[e.getKeyCode()] = false;
         
     }
     
     public void tick(){
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
-        pause = keys[KeyEvent.VK_P];
     }
     
 }

@@ -102,9 +102,10 @@ public class Game implements Runnable{
     
     private void tick(){
        
-        if(!getKeyManager().pause){
-           keyManager.tick();
-           player.tick(); 
+        keyManager.tick();
+
+        if(!keyManager.pause){
+           player.tick();
         }
        
         

@@ -73,11 +73,9 @@ public class Player extends Item {
     @Override
     public void render(Graphics g){
         // Insert IF for collision with ball to play bounce animation
-        g.drawImage(Assets.player, getX(), getY(), getWidht(), getHeight(), null);
+        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
     }
 
-    private int getWidht() {
-        return width;
-    }
+
     
 }

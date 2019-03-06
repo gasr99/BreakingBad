@@ -36,7 +36,7 @@ public class Brick extends Item {
     @Override
     public void render(Graphics g) {
         //g.drawImage(Assets.pillS, x, y,width, height, null);
-        g.drawImage(destroy.getCurrentFrame(), x, y,width, height, null);
+        g.drawImage(Assets.pillS, x, y,width, height, null);
     }
     
 }
