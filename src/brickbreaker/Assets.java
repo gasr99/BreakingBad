@@ -26,8 +26,8 @@ public class Assets {
     * initializing the images of the game */
     public static void init() {
     background = ImageLoader.loadImage("/images/background.jpg");
-    gameover = ImageLoader.loadImage("/images/game_over.jpeg");
     player = ImageLoader.loadImage("/images/player.png");
+    gameover = ImageLoader.loadImage("/images/gameover.jpeg");
     
     ball = new BufferedImage[9];
     ball[0] = ImageLoader.loadImage("/images/ball1.png");

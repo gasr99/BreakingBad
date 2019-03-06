@@ -51,7 +51,7 @@ public class Game implements Runnable {
     public void run() {
         init();
 
-        int fps = 50;
+        int fps = 30;
 
         double timeTick = 100000000 / fps;
 
@@ -115,8 +115,11 @@ public class Game implements Runnable {
             player.y = getHeight() - 100;
             ball.x = player.x + player.getWidth()/2 -25;
             ball.y = player.y - 51;
+            ball.setDirX(0);
+            ball.setDirY(-1);
             spawnBricks();
             keyManager.space = false;
+            ball.setMove(false);
             keyManager.restart = false;
         }
         
@@ -137,7 +140,7 @@ public class Game implements Runnable {
             if (ball.intersectsPlayerLeft(player)) {
                 timer--;
                 ball.setDirY(-1 * ball.getDirY());
-                ball.setDirX(ball.getDirX()-1);
+                ball.setDirX(ball.getDirX()-2);
             }
         }
         if (timer > 0) {
@@ -196,7 +199,7 @@ public class Game implements Runnable {
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         } else {
-            if(ball.getY() > height){
+            if(ball.getY() > height || bricks.isEmpty()){
                 g = bs.getDrawGraphics();
                 g.drawImage(Assets.gameover,0,0, width, height, null);
                 bs.show();
@@ -213,6 +216,7 @@ public class Game implements Runnable {
                 }
                 bs.show();
                 g.dispose();
+                
             }
         }
     }
