@@ -84,7 +84,7 @@ public class Game implements Runnable {
         display = new Display(title, width, height);
         Assets.init();
         player = new Player(getWidth() / 2 - 100, getHeight() - 100, 200, 40, this);
-        ball = new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 51), 50, 50, this);
+        ball = new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 31), 30, 30, this);
         spawnBricks();
         display.getJframe().addKeyListener(keyManager);
     }
@@ -93,9 +93,9 @@ public class Game implements Runnable {
      * Spawns the bricks for the game
      */
     private void spawnBricks() {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 4; j++) {
-                bricks.add(new Brick(100 * i, 50 * j + 50, 100, 50, this));
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 6; j++) {
+                bricks.add(new Brick(50 * i +10*i, 50 * j + 50, 50, 50, this));
             }
         }
     }

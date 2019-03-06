@@ -17,13 +17,11 @@ public class Player extends Item {
     private int width;
     private int height;
     private Game game;
-    private Animation bounce;
     
     public Player(int x, int y, int width, int height, Game game){
        super(x,y);
        this.width = width;
        this.height = height;
-       this.bounce = new Animation(Assets.bounce, 300);
        this.game = game;
     }
     
@@ -60,9 +58,7 @@ public class Player extends Item {
     
     @Override
     public void tick(){
-        
-        this.bounce.tick();
-        
+                
         if(game.getKeyManager().left){
             setX(getX() - 2);
         }
@@ -90,6 +86,6 @@ public class Player extends Item {
     @Override
     public void render(Graphics g){
         // Insert IF for collision with ball to play bounce animation
-        g.drawImage(bounce.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
     }
 }

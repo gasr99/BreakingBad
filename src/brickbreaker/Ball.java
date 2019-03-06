@@ -19,7 +19,6 @@ public class Ball extends Item {
     private boolean move;
     private int dirX;
     private int dirY;
-    private Animation ball;
     
     /**
      * 
@@ -33,7 +32,6 @@ public class Ball extends Item {
         super(x, y);
         this.width = width;
         this.height = height;
-        this.ball = new Animation(Assets.ball, 200);
         this.game = game;
         move = false;
         dirX = 0;
@@ -169,7 +167,6 @@ public class Ball extends Item {
      */
     @Override
     public void tick() {
-        ball.tick();
         //The ball moves all the time
         if (move) {
             setX(getX() + getDirX());
@@ -179,9 +176,11 @@ public class Ball extends Item {
         
         //Update direction of ball when colliding with boundaries
         if (getX() < 1) {
+            x = 1;
             dirX = -dirX;
         }
         if (getX() > game.getWidth()-(getWidth()+1)) {
+            x = game.getWidth() -(getWidth()-1);
             dirX = -dirX;
         }
         if (getY() < 1) {
@@ -196,7 +195,7 @@ public class Ball extends Item {
      */
     @Override
     public void render(Graphics g) {
-        g.drawImage(ball.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(Assets.ball, getX(), getY(), getWidth(), getHeight(), null);
     }
     
 }

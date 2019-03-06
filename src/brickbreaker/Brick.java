@@ -16,9 +16,7 @@ public class Brick extends Item {
     
     private int width;
     private int height;
-    private Game game;
-    public Animation destroy;
-    
+    private Game game;    
     /**
      * 
      * @param x to set initial position in X
@@ -31,7 +29,6 @@ public class Brick extends Item {
         super(x,y);
         this.width = width;
         this.height = height;
-        this.destroy = new Animation(Assets.pill,10);
         this.game = game;
     }
 
@@ -81,7 +78,6 @@ public Rectangle getPerimeter() {
      */
     @Override
     public void tick() {
-        this.destroy.tick();
     }
 
     /**
@@ -91,7 +87,7 @@ public Rectangle getPerimeter() {
     @Override
     public void render(Graphics g) {
         //g.drawImage(Assets.pillS, x, y,width, height, null);
-        g.drawImage(destroy.getCurrentFrame(), x, y,width, height, null);
+        g.drawImage(Assets.bag, x, y,width, height, null);
     }
     
 }
