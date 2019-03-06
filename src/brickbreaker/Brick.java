@@ -17,7 +17,7 @@ public class Brick extends Item {
     private int width;
     private int height;
     private Game game;
-    private Animation destroy;
+    public Animation destroy;
     
     public Brick(int x, int y, int width, int height, Game game){
         super(x,y);
@@ -60,7 +60,7 @@ public Rectangle getPerimeter() {
     @Override
     public void render(Graphics g) {
         //g.drawImage(Assets.pillS, x, y,width, height, null);
-        g.drawImage(Assets.pillS, x, y,width, height, null);
+        g.drawImage(destroy.getCurrentFrame(), x, y,width, height, null);
     }
     
 }

@@ -117,6 +117,7 @@ public class Game implements Runnable {
             ball.y = player.y - 51;
             spawnBricks();
             keyManager.space = false;
+            ball.setMove(false);
             keyManager.restart = false;
         }
         
@@ -137,7 +138,7 @@ public class Game implements Runnable {
             if (ball.intersectsPlayerLeft(player)) {
                 timer--;
                 ball.setDirY(-1 * ball.getDirY());
-                ball.setDirX(ball.getDirX()-1);
+                ball.setDirX(ball.getDirX()-2);
             }
         }
         if (timer > 0) {
@@ -198,7 +199,7 @@ public class Game implements Runnable {
         } else {
             if(ball.getY() > height){
                 g = bs.getDrawGraphics();
-                g.drawImage(Assets.gameover,0,0, width, width, null);
+                g.drawImage(Assets.gameover,0,0, width, height, null);
                 bs.show();
                 g.dispose();
             } else {
