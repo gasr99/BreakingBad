@@ -176,13 +176,13 @@ public class Ball extends Item {
         
         
         //Update direction of ball when colliding with boundaries
-        if (getX() < 0) {
+        if (getX() < 1) {
             dirX = -dirX;
         }
-        if (getX() > game.getWidth()) {
+        if (getX() > game.getWidth()-(getWidth()+1)) {
             dirX = -dirX;
         }
-        if (getY() < 0) {
+        if (getY() < 1) {
             dirY = -dirY;
         }
         

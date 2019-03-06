@@ -17,6 +17,7 @@ public class KeyManager implements KeyListener {
     
     public boolean left; // flag to move left
     public boolean right; // flag to move right
+    public boolean space = false; // to start moving ball
     public boolean pause = false; // flag to pause the game
     
     private boolean keys[]; // store flags for every key
@@ -34,12 +35,16 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e){
         // Change pause's state
-        if(e.getKeyCode() == KeyEvent.VK_P){
+        if (e.getKeyCode() == KeyEvent.VK_P){
             pause = !pause;
         }
         // Read imput if not paused
-        if(!pause){
+        if (!pause){
             keys[e.getKeyCode()] = true;
+        }
+        //Start moving ball
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            space = true;
         }
     }
     
