@@ -107,9 +107,21 @@ public class Game implements Runnable {
     private void tick() {
 
         keyManager.tick();
-
+        
+        // Restart Game
+        if(keyManager.restart){
+            bricks.clear();
+            player.x = getWidth() / 2 - 100;
+            player.y = getHeight() - 100;
+            ball.x = player.x + player.getWidth()/2 -25;
+            ball.y = player.y - 51;
+            spawnBricks();
+            keyManager.space = false;
+            keyManager.restart = false;
+        }
+        
         // If space is pressed once, starts ball movement
-        if (keyManager.space) {
+        if(keyManager.space) {
             ball.setMove(true);
         }
 
@@ -153,7 +165,7 @@ public class Game implements Runnable {
             
             if(ball.intersectsBrick(brick)){
                 if(ball.getX()+ball.getWidth()-1 <= brick.getPerimeter().x || ball.getX()+1 >= brick.getPerimeter().x+brick.getPerimeter().width){
-                    ball.setDirX(ball.getDirX()-1);
+                    ball.setDirX(ball.getDirX()*-1);
                 } else {
                     ball.setDirY(ball.getDirY()*-1);
                 }

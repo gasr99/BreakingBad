@@ -23,7 +23,7 @@ public class Player extends Item {
        super(x,y);
        this.width = width;
        this.height = height;
-       this.bounce = new Animation(Assets.bounce, 10);
+       this.bounce = new Animation(Assets.bounce, 300);
        this.game = game;
     }
     
@@ -64,11 +64,11 @@ public class Player extends Item {
         this.bounce.tick();
         
         if(game.getKeyManager().left){
-            setX(getX() - 1);
+            setX(getX() - 2);
         }
         
         if(game.getKeyManager().right){
-            setX(getX() + 1);
+            setX(getX() + 2);
         }
         
         //Movement constraints
@@ -90,6 +90,6 @@ public class Player extends Item {
     @Override
     public void render(Graphics g){
         // Insert IF for collision with ball to play bounce animation
-        g.drawImage(Assets.player, getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(bounce.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
 }

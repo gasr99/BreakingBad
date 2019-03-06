@@ -19,6 +19,7 @@ public class KeyManager implements KeyListener {
     public boolean right; // flag to move right
     public boolean space = false; // to start moving ball
     public boolean pause = false; // flag to pause the game
+    public boolean restart = false;
     
     private boolean keys[]; // store flags for every key
     
@@ -42,9 +43,14 @@ public class KeyManager implements KeyListener {
         if (!pause){
             keys[e.getKeyCode()] = true;
         }
+        
         //Start moving ball
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             space = true;
+        }
+        // Restart Game
+        if (e.getKeyCode() == KeyEvent.VK_R){
+            restart = true;
         }
     }
     
