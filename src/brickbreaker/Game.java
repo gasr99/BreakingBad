@@ -198,7 +198,7 @@ public class Game implements Runnable {
         } else {
             if(ball.getY() > height){
                 g = bs.getDrawGraphics();
-                g.drawImage(Assets.gameover,0,0, width, width, null);
+                g.drawImage(Assets.gameover,0,0, width, height, null);
                 bs.show();
                 g.dispose();
             } else {
