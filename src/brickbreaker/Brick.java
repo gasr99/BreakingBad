@@ -6,6 +6,7 @@
 package brickbreaker;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -24,6 +25,29 @@ public class Brick extends Item {
         this.height = height;
         this.destroy = new Animation(Assets.pill,10);
         this.game = game;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+    
+    
+    
+public Rectangle getPerimeter() {
+        //Assuming width 200
+        return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }
 
     @Override

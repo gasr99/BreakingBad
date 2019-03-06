@@ -25,6 +25,7 @@ public class Game implements Runnable{
     private Thread thread; // thread to create the game
     private boolean running; //to set the game
     private Player player; //to use a player
+    private Ball ball; // to use a ball
     private LinkedList<Brick> bricks;
     private KeyManager keyManager; // to manage the keyboard
     
@@ -80,7 +81,8 @@ public class Game implements Runnable{
     private void init(){
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(getWidth()/2, getHeight() - 100, 200, 40, this);
+        player = new Player(getWidth()/2-100, getHeight()-100, 200, 40, this);
+        ball = new Ball((player.getX() + player.getWidth()/2 - 25), (player.getY() - 51), 50, 50, this);
         spawnBricks();
         display.getJframe().addKeyListener(keyManager);
     }
@@ -91,7 +93,7 @@ public class Game implements Runnable{
     private void spawnBricks(){
         for(int i = 0; i < 6; i++){
             for(int j = 0; j < 4; j++){
-                bricks.add(new Brick(100*i, 50*j, 100, 50, this));
+                bricks.add(new Brick(100*i, 50*j+50, 100, 50, this));
             }
         }
     }
@@ -105,6 +107,9 @@ public class Game implements Runnable{
         if(!getKeyManager().pause){
            keyManager.tick();
            player.tick(); 
+           ball.tick();
+           
+           //
         }
        
         
@@ -125,6 +130,7 @@ public class Game implements Runnable{
             g = bs.getDrawGraphics();
             g.drawImage(Assets.background, 0, 0, width, height, null); 
             player.render(g);
+            ball.render(g);
             for (int i = 0; i < bricks.size(); i++) {
                     Brick brick =  bricks.get(i);
                     brick.tick();
