@@ -29,6 +29,7 @@ public class Game implements Runnable {
     private LinkedList<Brick> bricks;
     private KeyManager keyManager; // to manage the keyboard
     private int timer = 1; // timer for every collision of ball
+    private int destroy = 1;
 
     /**
      * to create title, width and height and set the game is still not running
@@ -124,7 +125,7 @@ public class Game implements Runnable {
             if (ball.intersectsPlayerLeft(player)) {
                 timer--;
                 ball.setDirY(-1 * ball.getDirY());
-                ball.setDirX(-2);
+                ball.setDirX(ball.getDirX()-1);
             }
         }
         if (timer > 0) {
@@ -132,7 +133,7 @@ public class Game implements Runnable {
             if (ball.intersectsPlayerRight(player)) {
                 timer--;
                 ball.setDirY(-1 * ball.getDirY());
-                ball.setDirX(ball.getDirX() + 1);
+                ball.setDirX(ball.getDirX()+1);
             }
         }
         if (timer > 0) {
@@ -144,6 +145,30 @@ public class Game implements Runnable {
         }
         
         timer = 1;
+        
+        // Validate collision with bricks
+        for(int i = 0; i < bricks.size(); i++){
+            
+            Brick brick = bricks.get(i);
+            
+            if(ball.intersectsBrick(brick)){
+                if(ball.getX()+ball.getWidth()-1 <= brick.getPerimeter().x || ball.getX()+1 >= brick.getPerimeter().x+brick.getPerimeter().width){
+                    ball.setDirX(ball.getDirX()-1);
+                } else {
+                    ball.setDirY(ball.getDirY()*-1);
+                }
+                
+                if(destroy != 0){
+                    bricks.remove(i);
+                    destroy = 0;
+                }
+            }
+            
+            
+            
+         } 
+        
+        destroy = 1;
 
     }
 
@@ -159,17 +184,24 @@ public class Game implements Runnable {
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         } else {
-            g = bs.getDrawGraphics();
-            g.drawImage(Assets.background, 0, 0, width, height, null);
-            player.render(g);
-            ball.render(g);
-            for (int i = 0; i < bricks.size(); i++) {
-                Brick brick = bricks.get(i);
-                brick.tick();
-                brick.render(g);
+            if(ball.getY() > height){
+                g = bs.getDrawGraphics();
+                g.drawImage(Assets.gameover,0,0, width, width, null);
+                bs.show();
+                g.dispose();
+            } else {
+                g = bs.getDrawGraphics();
+                g.drawImage(Assets.background, 0, 0, width, height, null);
+                player.render(g);
+                ball.render(g);
+                for (int i = 0; i < bricks.size(); i++) {
+                    Brick brick = bricks.get(i);
+                    brick.tick();
+                    brick.render(g);
+                }
+                bs.show();
+                g.dispose();
             }
-            bs.show();
-            g.dispose();
         }
     }
 

@@ -35,11 +35,11 @@ public class Ball extends Item {
         this.game = game;
         move = false;
         dirX = 0;
-        dirY = -1;
+        dirY = -2;
     }
 
     /**
-     * Getter fot width
+     * Getter for width
      * @return width
      */
     public int getWidth() {

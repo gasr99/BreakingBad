@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 public class Assets {
     
     public static BufferedImage background; // to store background image 
+    public static BufferedImage gameover;
     public static BufferedImage player; // to store the player image
     public static BufferedImage ball; // to store the ball image
     public static BufferedImage pillS;
@@ -25,6 +26,7 @@ public class Assets {
     * initializing the images of the game */
     public static void init() {
     background = ImageLoader.loadImage("/images/background.jpg");
+    gameover = ImageLoader.loadImage("/images/game_over.jpeg");
     player = ImageLoader.loadImage("/images/player.png");
     ball = ImageLoader.loadImage("/images/ball.png");
     pillS = ImageLoader.loadImage("/images/pill_1.png");
