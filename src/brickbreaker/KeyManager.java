@@ -20,6 +20,8 @@ public class KeyManager implements KeyListener {
     public boolean space = false; // to start moving ball
     public boolean pause = false; // flag to pause the game
     public boolean restart = false;
+    public boolean save;
+    public boolean load;
     
     private boolean keys[]; // store flags for every key
     
@@ -63,6 +65,8 @@ public class KeyManager implements KeyListener {
     public void tick(){
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
+        save = keys[KeyEvent.VK_G];
+        load = keys[KeyEvent.VK_C];
     }
     
 }

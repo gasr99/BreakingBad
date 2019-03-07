@@ -26,11 +26,12 @@ public class Game implements Runnable {
     private Thread thread; // thread to create the game
     private boolean running; //to set the game
     private Player player; //to use a player
-    private LinkedList<Ball> balls; // to use a ball
-    private LinkedList<Brick> bricks;
+    public LinkedList<Ball> balls; // to use a ball
+    public LinkedList<Brick> bricks;
     private KeyManager keyManager; // to manage the keyboard
     private int destroy = 1;
-    private LinkedList<pow1> powUP1;
+    public LinkedList<pow1> powUP1;
+    public SaveLoad saveload;
     
 
     /**
@@ -47,6 +48,7 @@ public class Game implements Runnable {
         running = false;
         keyManager = new KeyManager();
         bricks = new LinkedList<Brick>();
+        saveload = new SaveLoad(this);
     }
 
     @Override
@@ -90,6 +92,7 @@ public class Game implements Runnable {
         balls.add(new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 31), 30, 30, this));
         powUP1 = new LinkedList<>();
         spawnBricks();
+        
         display.getJframe().addKeyListener(keyManager);
     }
 
@@ -131,6 +134,15 @@ public class Game implements Runnable {
             balls.getFirst().setMove(false);
             keyManager.restart = false;
         }
+        
+        if(keyManager.save){
+            saveload.saveGame();
+        }
+        
+        if(keyManager.load){
+            saveload.loadGame();
+        }
+        
         if (!balls.isEmpty()) {
             if (keyManager.space) {
                 balls.getFirst().setMove(true);
@@ -318,6 +330,22 @@ public class Game implements Runnable {
 
     int getHeight() {
         return height;
+    }
+    
+    Player getPlayer(){
+        return player;
+    }
+    
+    int getBalls(){
+        return balls.size();
+    }
+    
+    int getBricks(){
+        return bricks.size();
+    }
+    
+    int getpowUP(){
+        return powUP1.size();
     }
 
 }
