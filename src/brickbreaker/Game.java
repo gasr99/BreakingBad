@@ -28,7 +28,6 @@ public class Game implements Runnable {
     private Ball ball; // to use a ball
     private LinkedList<Brick> bricks;
     private KeyManager keyManager; // to manage the keyboard
-    private int timer = 1; // timer for every collision of ball
     private int destroy = 1;
 
     /**
@@ -135,44 +134,36 @@ public class Game implements Runnable {
         }
 
         // Validate collisions betwen ball and player
-//        if (timer > 0) {
+
             // Collision with left part of the bar
             if (ball.intersectsPlayerLeft(player)) {
-//                timer--;
-//                ball.setDirY(-ball.getDirY());
-//                ball.setDirX((ball.getDirX() - 1 < -2) ? -2 : ball.getDirX() - 1);
-
-                // Constraints for collision between ball and player
-                // Collides from left
-                if (ball.getX() + ball.getWidth() - 1 <= player.getPerimeterLeft().x && ball.getY() + ball.getHeight() >= player.getPerimeterLeft().y) {
-                    ball.setX(player.getPerimeterLeft().x - ball.getWidth() - 1);
-                    ball.setDirX(-ball.getDirX());
-                } else {
+                // intersect from the left
+                if (ball.getX() + ball.getWidth() - 2  <= player.getPerimeterLeft().x && ball.getY() + ball.getHeight() > player.getPerimeterLeft().y) {
+                    ball.setDirX(-ball.getDirX()); //changes direction (bounce)
+                    ball.setX(player.getPerimeterLeft().x - ball.getWidth() - 2);
+                } //intersects from the top
+                else /*(ball.getX() + ball.getWidth() <= player.getPerimeterLeft().x + player.getPerimeterLeft().width && ball.getY() + ball.getHeight() <= player.getPerimeterLeft().y) */{
                     ball.setY(player.getPerimeterLeft().y - ball.getHeight() - 1);
                     ball.setDirY(-ball.getDirY());
                     ball.setDirX((ball.getDirX() - 1 < -2) ? -2 : ball.getDirX() - 1);
                 }
-                
-
             }
-//        }
-        if (timer > 0) {
             // Collision with right part of bar
             if (ball.intersectsPlayerRight(player)) {
-                timer--;
-                ball.setDirY(-ball.getDirY());
-                ball.setDirX((ball.getDirX() + 1 > 2) ? 2 : ball.getDirX() + 1);
+                if (ball.getX() + 2 >= player.getPerimeterRight().x + player.getPerimeterRight().width && ball.getY() + ball.getHeight() > player.getPerimeterRight().y) {
+                    ball.setDirX(-ball.getDirX());
+                    ball.setX(player.getPerimeterRight().x + player.getPerimeterRight().width + 2);
+                } else {
+                    ball.setY(player.getPerimeterRight().y - ball.getHeight() - 1);
+                    ball.setDirY(-ball.getDirY());
+                    ball.setDirX((ball.getDirX() + 1 > 2) ? 2 : ball.getDirX() + 1);
+                }
             }
-        }
-        if (timer > 0) {
             // Collision with middle of the bar
             if (ball.intersectsPlayerMid(player)) {
-                timer--;
+                ball.setY(player.getPerimeterMid().y - ball.getHeight() - 1);
                 ball.setDirY(-ball.getDirY());
             }
-        }
-
-        timer = 1;
 
         // Validate collision with bricks
         for (int i = 0; i < bricks.size(); i++) {
