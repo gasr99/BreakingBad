@@ -8,6 +8,7 @@ package brickbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import static java.lang.Math.random;
 import java.util.LinkedList;
 
 /**
@@ -30,6 +31,8 @@ public class Game implements Runnable {
     private KeyManager keyManager; // to manage the keyboard
     private int timer = 1; // timer for every collision of ball
     private int destroy = 1;
+    private LinkedList<pow1> powUP1;
+    
 
     /**
      * to create title, width and height and set the game is still not running
@@ -85,6 +88,7 @@ public class Game implements Runnable {
         Assets.init();
         player = new Player(getWidth() / 2 - 100, getHeight() - 100, 200, 40, this);
         ball = new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 31), 30, 30, this);
+        powUP1 = new LinkedList<>();
         spawnBricks();
         display.getJframe().addKeyListener(keyManager);
     }
@@ -99,6 +103,15 @@ public class Game implements Runnable {
             }
         }
     }
+    
+    private void power1(){
+        
+        for(int i = 0; i < 1000; i++){
+          // This is a timer  
+          player.setWidth(300);
+        }
+        player.setWidth(200);
+    }
 
     public KeyManager getKeyManager() {
         return keyManager;
@@ -111,6 +124,7 @@ public class Game implements Runnable {
         // Restart Game
         if(keyManager.restart){
             bricks.clear();
+            powUP1.clear();
             player.x = getWidth() / 2 - 100;
             player.y = getHeight() - 100;
             ball.x = player.x + player.getWidth()/2 -25;
@@ -132,7 +146,21 @@ public class Game implements Runnable {
         if (!keyManager.pause) {
             player.tick();
             ball.tick();
+            for(int i = 0; i < powUP1.size();i++){
+                pow1 power = powUP1.get(i);
+                power.tick();
+                if(power.intersectsPlayer(player)){
+                    player.powerONE();
+                    powUP1.remove(i);
+                }
+                if(power.getY()>height){
+                    powUP1.remove(i);
+                }
+            }
         }
+        
+        // Validate collision with powerUP1
+        
 
         // Validate collisions betwen ball and player
         if (timer > 0) {
@@ -174,13 +202,15 @@ public class Game implements Runnable {
                 }
                 
                 if(destroy != 0){
+                    int cond = 5;//(int) (Math.random() * 100 + 1);
+                    if(cond > 3){
+                       powUP1.add(new pow1(brick.getX(), brick.getY(), 50, 50, this)); 
+                    }
                     bricks.remove(i);
+                    
                     destroy = 0;
                 }
             }
-            
-            
-            
          } 
         
         destroy = 1;
@@ -213,6 +243,10 @@ public class Game implements Runnable {
                     Brick brick = bricks.get(i);
                     brick.tick();
                     brick.render(g);
+                }
+                for(int i = 0; i < powUP1.size();i++){
+                    pow1 power = powUP1.get(i);
+                    power.render(g);
                 }
                 bs.show();
                 g.dispose();

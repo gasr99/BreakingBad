@@ -56,6 +56,17 @@ public class Player extends Item {
         return new Rectangle(getX() + 140, getY(), 60, getHeight());
     }
     
+    public Rectangle getPerimeter(){
+        return new Rectangle(getX(),getY(),width,height);
+    }
+    
+    public void powerONE(){
+        for(int i = 0; i< 1000; i++){
+            this.width = 300;
+        }
+        this.width = 200;
+    }
+    
     @Override
     public void tick(){
                 
