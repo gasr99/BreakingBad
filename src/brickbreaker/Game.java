@@ -83,8 +83,8 @@ public class Game implements Runnable {
     private void init() {
         display = new Display(title, width, height);
         Assets.init();
-        player = new Player(getWidth() / 2 - 100, getHeight() - 100, 200, 40, this);
-        ball = new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 31), 30, 30, this);
+        player = new Player(getWidth() / 2 - 100, getHeight() - 100, 200, 86, this);
+        ball = new Ball((player.getX() + player.getWidth() / 2 - 15), (player.getY() - 31), 30, 30, this);
         spawnBricks();
         display.getJframe().addKeyListener(keyManager);
     }
@@ -95,7 +95,7 @@ public class Game implements Runnable {
     private void spawnBricks() {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 6; j++) {
-                bricks.add(new Brick(50 * i +10*i, 50 * j + 50, 50, 50, this));
+                bricks.add(new Brick(50 * i + 10 * i + 5, 50 * j + 50, 50, 50, this));
             }
         }
     }
@@ -107,14 +107,14 @@ public class Game implements Runnable {
     private void tick() {
 
         keyManager.tick();
-        
-        // Restart Game
-        if(keyManager.restart){
+
+        // Restarts Game with all initial values
+        if (keyManager.restart) {
             bricks.clear();
             player.x = getWidth() / 2 - 100;
             player.y = getHeight() - 100;
-            ball.x = player.x + player.getWidth()/2 -25;
-            ball.y = player.y - 51;
+            ball.x = player.x + player.getWidth() / 2 - 15;
+            ball.y = player.y - 31;
             ball.setDirX(0);
             ball.setDirY(-1);
             spawnBricks();
@@ -122,9 +122,9 @@ public class Game implements Runnable {
             ball.setMove(false);
             keyManager.restart = false;
         }
-        
+
         // If space is pressed once, starts ball movement
-        if(keyManager.space) {
+        if (keyManager.space) {
             ball.setMove(true);
         }
 
@@ -135,54 +135,90 @@ public class Game implements Runnable {
         }
 
         // Validate collisions betwen ball and player
-        if (timer > 0) {
-           // Collision with left part of the bar
+//        if (timer > 0) {
+            // Collision with left part of the bar
             if (ball.intersectsPlayerLeft(player)) {
-                timer--;
-                ball.setDirY(-1 * ball.getDirY());
-                ball.setDirX(ball.getDirX()-2);
+//                timer--;
+//                ball.setDirY(-ball.getDirY());
+//                ball.setDirX((ball.getDirX() - 1 < -2) ? -2 : ball.getDirX() - 1);
+
+                // Constraints for collision between ball and player
+                // Collides from left
+                if (ball.getX() + ball.getWidth() - 1 <= player.getPerimeterLeft().x && ball.getY() + ball.getHeight() >= player.getPerimeterLeft().y) {
+                    ball.setX(player.getPerimeterLeft().x - ball.getWidth() - 1);
+                    ball.setDirX(-ball.getDirX());
+                } else {
+                    ball.setY(player.getPerimeterLeft().y - ball.getHeight() - 1);
+                    ball.setDirY(-ball.getDirY());
+                    ball.setDirX((ball.getDirX() - 1 < -2) ? -2 : ball.getDirX() - 1);
+                }
+                
+
             }
-        }
+//        }
         if (timer > 0) {
             // Collision with right part of bar
             if (ball.intersectsPlayerRight(player)) {
                 timer--;
-                ball.setDirY(-1 * ball.getDirY());
-                ball.setDirX(ball.getDirX()+1);
+                ball.setDirY(-ball.getDirY());
+                ball.setDirX((ball.getDirX() + 1 > 2) ? 2 : ball.getDirX() + 1);
             }
         }
         if (timer > 0) {
             // Collision with middle of the bar
             if (ball.intersectsPlayerMid(player)) {
                 timer--;
-                ball.setDirY(-1 * ball.getDirY());
+                ball.setDirY(-ball.getDirY());
             }
         }
-        
+
         timer = 1;
-        
+
         // Validate collision with bricks
-        for(int i = 0; i < bricks.size(); i++){
-            
+        for (int i = 0; i < bricks.size(); i++) {
+
             Brick brick = bricks.get(i);
-            
-            if(ball.intersectsBrick(brick)){
-                if(ball.getX()+ball.getWidth()-1 <= brick.getPerimeter().x || ball.getX()+1 >= brick.getPerimeter().x+brick.getPerimeter().width){
-                    ball.setDirX(ball.getDirX()*-1);
+
+            if (ball.intersectsBrick(brick)) {
+                if (ball.getX() + ball.getWidth() - 1 <= brick.getPerimeter().x || ball.getX() + 1 >= brick.getPerimeter().x + brick.getPerimeter().width) {
+                    ball.setDirX(-ball.getDirX());
                 } else {
-                    ball.setDirY(ball.getDirY()*-1);
+                    ball.setDirY(-ball.getDirY());
                 }
-                
-                if(destroy != 0){
+
+                if (destroy != 0) {
                     bricks.remove(i);
                     destroy = 0;
                 }
             }
-            
-            
-            
-         } 
-        
+//            if (ball.intersectsBrick(brick)) {
+//                // Collides from left
+//                if (ball.getX() + ball.getWidth() - 1 <= brick.getPerimeter().x ) {
+//                    ball.setX(brick.getPerimeter().x - 1);
+//                    ball.setDirX(-ball.getDirX());
+//                }
+//                // Collides from right
+//                else if (ball.getX() + 1 >= brick.getPerimeter().x + brick.getPerimeter().width) {
+//                    ball.setX(brick.getPerimeter().x + brick.getPerimeter().width + 1);
+//                    ball.setDirX(-ball.getDirX());
+//                }
+//                // Collision from bottom
+//                else if (ball.getY() + 1 >= brick.getPerimeter().y + brick.getPerimeter().height) {
+//                    ball.setY(brick.getPerimeter().y + brick.getPerimeter().height + 1);
+//                    ball.setDirY(-ball.getDirY());
+//                }else {
+//                    ball.setY(brick.getPerimeter().y + 1);
+//                    ball.setDirY(-ball.getDirY());
+//                }
+//
+//                if (destroy != 0) {
+//                    bricks.remove(i);
+//                    destroy = 0;
+//                }
+//            }
+
+        }
+
         destroy = 1;
 
     }
@@ -199,9 +235,9 @@ public class Game implements Runnable {
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         } else {
-            if(ball.getY() > height || bricks.isEmpty()){
+            if (ball.getY() > height || bricks.isEmpty()) {
                 g = bs.getDrawGraphics();
-                g.drawImage(Assets.gameover,0,0, width, height, null);
+                g.drawImage(Assets.gameover, 0, 0, width, height, null);
                 bs.show();
                 g.dispose();
             } else {
@@ -216,7 +252,7 @@ public class Game implements Runnable {
                 }
                 bs.show();
                 g.dispose();
-                
+
             }
         }
     }

@@ -43,17 +43,17 @@ public class Player extends Item {
     
     public Rectangle getPerimeterLeft() {
         //Assuming width 200
-        return new Rectangle(getX(), getY(), 60, getHeight());
+        return new Rectangle(getX(), getY(), getWidth()/3, getHeight());
     }
     
     public Rectangle getPerimeterMid() {
         //Assuming width 200
-        return new Rectangle(getX() + 60, getY(), 80, getHeight());
+        return new Rectangle(getX() + getWidth()/3, getY(), getWidth()/3, getHeight());
     }
     
     public Rectangle getPerimeterRight() {
         //Assuming width 200
-        return new Rectangle(getX() + 140, getY(), 60, getHeight());
+        return new Rectangle(getX() + getWidth()/3*2, getY(), getWidth()/3, getHeight());
     }
     
     @Override
@@ -68,11 +68,11 @@ public class Player extends Item {
         }
         
         //Movement constraints
-        if(getX() + 100 >= game.getWidth()){
-            setX(game.getWidth() - 101);
+        if(getX() + getWidth()/3 >= game.getWidth()){
+            setX(game.getWidth() - getWidth()/3);
             
-        } else if(getX() + 100 <= 0){
-            setX(-99);  
+        } else if(getX() + getWidth()/3*2 <= 0){
+            setX(-getWidth()/3*2);  
         }
         
         if(getY() + 80 >= game.getHeight()){

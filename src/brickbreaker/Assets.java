@@ -27,7 +27,7 @@ public class Assets {
     public static void init() {
     //background = ImageLoader.loadImage("/images/streetbackground2.png");
     background = ImageLoader.loadImage("/images/fondo.png");
-    player = ImageLoader.loadImage("/images/player.jpeg");
+    player = ImageLoader.loadImage("/images/playerbill.jpeg");
     gameover = ImageLoader.loadImage("/images/gameover.jpeg");
     bag = ImageLoader.loadImage("/images/bag.png");
     ball = ImageLoader.loadImage("/images/bluesky.png");

@@ -35,7 +35,7 @@ public class Ball extends Item {
         this.game = game;
         move = false;
         dirX = 0;
-        dirY = -2;
+        dirY = -1;
     }
 
     /**
@@ -179,8 +179,8 @@ public class Ball extends Item {
             x = 1;
             dirX = -dirX;
         }
-        if (getX() > game.getWidth()-(getWidth()+1)) {
-            x = game.getWidth() -(getWidth()-1);
+        if (getX() > game.getWidth()-getWidth()) {
+            x = game.getWidth() - (getWidth()+1);
             dirX = -dirX;
         }
         if (getY() < 1) {
