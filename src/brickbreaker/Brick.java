@@ -68,7 +68,7 @@ public class Brick extends Item {
      * method that calculates perimeter of brick instance
      * @return Rectangle
      */
-public Rectangle getPerimeter() {
+    public Rectangle getPerimeter() {
         //Assuming width 200
         return new Rectangle(getX(), getY(), getWidth(), getHeight());
     }

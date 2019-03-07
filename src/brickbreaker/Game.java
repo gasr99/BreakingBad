@@ -8,6 +8,7 @@ package brickbreaker;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import static java.lang.Math.random;
 import java.util.LinkedList;
 
 /**
@@ -25,10 +26,12 @@ public class Game implements Runnable {
     private Thread thread; // thread to create the game
     private boolean running; //to set the game
     private Player player; //to use a player
-    private Ball ball; // to use a ball
+    private LinkedList<Ball> balls; // to use a ball
     private LinkedList<Brick> bricks;
     private KeyManager keyManager; // to manage the keyboard
     private int destroy = 1;
+    private LinkedList<pow1> powUP1;
+    
 
     /**
      * to create title, width and height and set the game is still not running
@@ -83,7 +86,9 @@ public class Game implements Runnable {
         display = new Display(title, width, height);
         Assets.init();
         player = new Player(getWidth() / 2 - 100, getHeight() - 100, 200, 86, this);
-        ball = new Ball((player.getX() + player.getWidth() / 2 - 15), (player.getY() - 31), 30, 30, this);
+        balls = new LinkedList<>();
+        balls.add(new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 31), 30, 30, this));
+        powUP1 = new LinkedList<>();
         spawnBricks();
         display.getJframe().addKeyListener(keyManager);
     }
@@ -98,6 +103,12 @@ public class Game implements Runnable {
             }
         }
     }
+    
+    private void power1(){
+        
+        balls.add(new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 31), 30, 30, this));
+        balls.getLast().setMove(true);
+    }
 
     public KeyManager getKeyManager() {
         return keyManager;
@@ -110,78 +121,97 @@ public class Game implements Runnable {
         // Restarts Game with all initial values
         if (keyManager.restart) {
             bricks.clear();
+            powUP1.clear();
+            balls.clear();
             player.x = getWidth() / 2 - 100;
             player.y = getHeight() - 100;
-            ball.x = player.x + player.getWidth() / 2 - 15;
-            ball.y = player.y - 31;
-            ball.setDirX(0);
-            ball.setDirY(-1);
+            balls.add(new Ball((player.getX() + player.getWidth() / 2 - 25), (player.getY() - 31), 30, 30, this));
             spawnBricks();
             keyManager.space = false;
-            ball.setMove(false);
+            balls.getFirst().setMove(false);
             keyManager.restart = false;
         }
-
-        // If space is pressed once, starts ball movement
-        if (keyManager.space) {
-            ball.setMove(true);
+        if (!balls.isEmpty()) {
+            if (keyManager.space) {
+                balls.getFirst().setMove(true);
+            }
         }
 
         // If game is not in pause, it runs
         if (!keyManager.pause) {
             player.tick();
-            ball.tick();
-        }
+            for (int i = 0; i < powUP1.size(); i++) {
+                pow1 power = powUP1.get(i);
+                power.tick();
+                if (power.intersectsPlayer(player)) {
+                    power1();
+                    powUP1.remove(i);
+                }
+                if (power.getY() > height) {
+                    powUP1.remove(i);
+                }
+            }
+            for (Ball b : balls) {
+                b.tick();
+                // Validate collisions betwen ball and player
 
-        // Validate collisions betwen ball and player
-
-            // Collision with left part of the bar
-            if (ball.intersectsPlayerLeft(player)) {
-                // intersect from the left
-                if (ball.getX() + ball.getWidth() - 2  <= player.getPerimeterLeft().x && ball.getY() + ball.getHeight() > player.getPerimeterLeft().y) {
-                    ball.setDirX(-ball.getDirX()); //changes direction (bounce)
-                    ball.setX(player.getPerimeterLeft().x - ball.getWidth() - 2);
+                // Collision with left part of the bar
+                if (b.intersectsPlayerLeft(player)) {
+                    if (b.getX() + b.getWidth() - 2  <= player.getPerimeterLeft().x && b.getY() + b.getHeight() > player.getPerimeterLeft().y) {
+                    b.setDirX(-b.getDirX()); //changes direction (bounce)
+                    b.setX(player.getPerimeterLeft().x - b.getWidth() - 2);
                 } //intersects from the top
                 else /*(ball.getX() + ball.getWidth() <= player.getPerimeterLeft().x + player.getPerimeterLeft().width && ball.getY() + ball.getHeight() <= player.getPerimeterLeft().y) */{
-                    ball.setY(player.getPerimeterLeft().y - ball.getHeight() - 1);
-                    ball.setDirY(-ball.getDirY());
-                    ball.setDirX((ball.getDirX() - 1 < -2) ? -2 : ball.getDirX() - 1);
+                    b.setY(player.getPerimeterLeft().y - b.getHeight() - 1);
+                    b.setDirY(-b.getDirY());
+                    b.setDirX((b.getDirX() - 1 < -2) ? -2 : b.getDirX() - 1);
                 }
-            }
-            // Collision with right part of bar
-            if (ball.intersectsPlayerRight(player)) {
-                if (ball.getX() + 2 >= player.getPerimeterRight().x + player.getPerimeterRight().width && ball.getY() + ball.getHeight() > player.getPerimeterRight().y) {
-                    ball.setDirX(-ball.getDirX());
-                    ball.setX(player.getPerimeterRight().x + player.getPerimeterRight().width + 2);
+                }
+
+                if (b.intersectsPlayerRight(player)) {
+                    if (b.getX() + 2 >= player.getPerimeterRight().x + player.getPerimeterRight().width && b.getY() + b.getHeight() > player.getPerimeterRight().y) {
+                    b.setDirX(-b.getDirX());
+                    b.setX(player.getPerimeterRight().x + player.getPerimeterRight().width + 2);
                 } else {
-                    ball.setY(player.getPerimeterRight().y - ball.getHeight() - 1);
-                    ball.setDirY(-ball.getDirY());
-                    ball.setDirX((ball.getDirX() + 1 > 2) ? 2 : ball.getDirX() + 1);
+                    b.setY(player.getPerimeterRight().y - b.getHeight() - 1);
+                    b.setDirY(-b.getDirY());
+                    b.setDirX((b.getDirX() + 1 > 2) ? 2 : b.getDirX() + 1);
                 }
-            }
-            // Collision with middle of the bar
-            if (ball.intersectsPlayerMid(player)) {
-                ball.setY(player.getPerimeterMid().y - ball.getHeight() - 1);
-                ball.setDirY(-ball.getDirY());
-            }
-
-        // Validate collision with bricks
-        for (int i = 0; i < bricks.size(); i++) {
-
-            Brick brick = bricks.get(i);
-
-            if (ball.intersectsBrick(brick)) {
-                if (ball.getX() + ball.getWidth() - 1 <= brick.getPerimeter().x || ball.getX() + 1 >= brick.getPerimeter().x + brick.getPerimeter().width) {
-                    ball.setDirX(-ball.getDirX());
-                } else {
-                    ball.setDirY(-ball.getDirY());
+                }
+                if (b.intersectsPlayerMid(player)) {
+                    b.setY(player.getPerimeterMid().y - b.getHeight() - 1);
+                    b.setDirY(-b.getDirY());
                 }
 
-                if (destroy != 0) {
-                    bricks.remove(i);
-                    destroy = 0;
+                // Validate collision with bricks
+                for (int i = 0; i < bricks.size(); i++) {
+
+                    Brick brick = bricks.get(i);
+                    if (destroy != 0) {
+
+                        if (b.intersectsBrick(brick)) {
+                            if (b.getX() + b.getWidth() - 1 <= brick.getPerimeter().x || b.getX() + 1 >= brick.getPerimeter().x + brick.getPerimeter().width) {
+                                b.setDirX(-b.getDirX());
+                            } else {
+                                b.setDirY(-b.getDirY());
+                            }
+
+                            if (destroy != 0) {
+                                int cond = (int) Math.floor(Math.random() * 101);
+                                if (cond < 10) {
+                                    powUP1.add(new pow1(brick.getX(), brick.getY(), 50, 50, this));
+                                }
+                                bricks.remove(i);
+
+                                destroy = 0;
+                            }
+                        }
+                    }
+                    destroy = 1;
                 }
             }
+                 
+
 //            if (ball.intersectsBrick(brick)) {
 //                // Collides from left
 //                if (ball.getX() + ball.getWidth() - 1 <= brick.getPerimeter().x ) {
@@ -206,13 +236,12 @@ public class Game implements Runnable {
 //                    bricks.remove(i);
 //                    destroy = 0;
 //                }
-//            }
-
+//            }        
+            }
+            
         }
 
-        destroy = 1;
-
-    }
+    
 
     private void render() {
         //gets buffer strategy from the displya
@@ -226,7 +255,11 @@ public class Game implements Runnable {
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
         } else {
-            if (ball.getY() > height || bricks.isEmpty()) {
+            for(int i = 0; i < balls.size(); i++){
+                if(balls.get(i).y > height)
+                    balls.remove(i);
+            }
+            if(balls.isEmpty() || bricks.isEmpty()){
                 g = bs.getDrawGraphics();
                 g.drawImage(Assets.gameover, 0, 0, width, height, null);
                 bs.show();
@@ -235,11 +268,17 @@ public class Game implements Runnable {
                 g = bs.getDrawGraphics();
                 g.drawImage(Assets.background, 0, 0, width, height, null);
                 player.render(g);
-                ball.render(g);
+                for(Ball b: balls){
+                    b.render(g);
+                }
                 for (int i = 0; i < bricks.size(); i++) {
                     Brick brick = bricks.get(i);
                     brick.tick();
                     brick.render(g);
+                }
+                for(int i = 0; i < powUP1.size();i++){
+                    pow1 power = powUP1.get(i);
+                    power.render(g);
                 }
                 bs.show();
                 g.dispose();
